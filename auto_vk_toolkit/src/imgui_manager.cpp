@@ -240,9 +240,17 @@ namespace avk
 			bool shift = input().key_down(key_code::left_shift) || input().key_down(key_code::right_shift);
 			bool alt = input().key_down(key_code::left_alt) || input().key_down(key_code::right_alt);
 			bool super = input().key_down(key_code::left_super) || input().key_down(key_code::right_super);
+			
+#if (IMGUI_VERSION_NUM <= 18613)
 			ImGuiKeyModFlags mods = (ctrl ? ImGuiKeyModFlags_Ctrl : 0) | (shift ? ImGuiKeyModFlags_Shift : 0) | (alt ? ImGuiKeyModFlags_Alt : 0) | (super ? ImGuiKeyModFlags_Super : 0);
 			io.AddKeyModsEvent(mods);
-
+#else
+			// https://github.com/ocornut/imgui/commit/c906c65cac6860e7e77649100cdf8fbf1bb201a0
+			io.AddKeyEvent(ImGuiKey_ModCtrl, ctrl);
+			io.AddKeyEvent(ImGuiKey_ModShift, shift);
+			io.AddKeyEvent(ImGuiKey_ModAlt, alt);
+			io.AddKeyEvent(ImGuiKey_ModSuper, super);
+#endif
 
 			// Characters:
 			for (auto c : input().entered_characters()) {
