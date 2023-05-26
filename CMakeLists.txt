@@ -85,7 +85,11 @@ endif(MSVC)
 
 # Disable obsolete functionality in ImGui:
 # (Can be removed once ImGui has deprecated these for good, and acts as if these were defined.)
-target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_DISABLE_OBSOLETE_KEYIO IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+if (${avk_toolkit_LibraryType} STREQUAL "INTERFACE")
+    target_compile_definitions(${PROJECT_NAME} INTERFACE IMGUI_DISABLE_OBSOLETE_KEYIO IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+else()
+    target_compile_definitions(${PROJECT_NAME} PUBLIC IMGUI_DISABLE_OBSOLETE_KEYIO IMGUI_DISABLE_OBSOLETE_FUNCTIONS)
+endif()
 
 ## Direct Sources & Includes
 # NOTE: We first collect all include directories and source files and add it to our target in the end.
